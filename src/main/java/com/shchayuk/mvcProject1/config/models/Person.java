@@ -1,8 +1,17 @@
 package com.shchayuk.mvcProject1.config.models;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
 public class Person {
     private int id;
+
+//    @Size(min = 2, max = 100, message = "Enter the name form 2 to 100 characters")
     private String name;
+//    @Min(value = 1921, message = "Enter the year greater than 1920")
+//    @Max(value = 2015, message = "Enter the year less than 2016")
     private int year;
 
     public Person() {

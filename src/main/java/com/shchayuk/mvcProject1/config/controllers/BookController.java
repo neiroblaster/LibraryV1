@@ -7,7 +7,10 @@ import com.shchayuk.mvcProject1.config.models.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/books")
@@ -44,7 +47,11 @@ public class BookController {
     }
 
     @PostMapping()
-    public String create(Book book){
+    public String create(@Valid Book book, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return "books/new";
+        }
+
         bookDAO.save(book);
         return "redirect:/books";
     }
@@ -56,9 +63,14 @@ public class BookController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@PathVariable("id") int id, @ModelAttribute("book") Book book){
+    public String update(@PathVariable("id") int id, @ModelAttribute("book") @Valid Book book,
+                         BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return "books/edit";
+        }
+
         bookDAO.update(id, book);
-        return "redirect:/books";
+        return "redirect:/books/" + id;
     }
 
     @DeleteMapping("/{id}")
@@ -68,14 +80,15 @@ public class BookController {
     }
 
     @PatchMapping("/{id}/lend")
-    public String lendTheBook(@PathVariable("id") int id, @ModelAttribute("person") Person person){
+    public String lendTheBook(@PathVariable("id") int id,
+                              @ModelAttribute("person") Person person){
         bookDAO.lendTheBook(id, person.getId());
-        return "redirect:/books";
+        return "redirect:/books/" + id;
     }
 
         @PatchMapping("/{id}/release")
     public String releaseTheBook(@PathVariable("id") int id){
         bookDAO.releaseTheBook(id);
-        return "redirect:/books";
+        return "redirect:/books/" + id;
     }
 }

@@ -800,7 +800,7 @@ false Zulu
     <database id="4" parent="1" name="project1">
       <ObjectId>16538</ObjectId>
       <Owner>postgres</Owner>
-      <IntrospectionStateNumber>3026</IntrospectionStateNumber>
+      <IntrospectionStateNumber>3165</IntrospectionStateNumber>
       <Current>1</Current>
       <Relations>sequence|table|16539|16540|1
 sequence|table|16582|16583|1
@@ -1081,15 +1081,16 @@ U/6171
       <ColNames>name</ColNames>
       <UnderlyingIndexName>book_name_key</UnderlyingIndexName>
     </key>
-    <foreign-key id="49" parent="37" name="book_person_id_fkey">
-      <ObjectId>16593</ObjectId>
-      <StateNumber>2976</StateNumber>
+    <foreign-key id="49" parent="37" name="fk_personorder">
+      <ObjectId>16599</ObjectId>
+      <StateNumber>3164</StateNumber>
       <ColNames>person_id</ColNames>
       <RefTableId>16540</RefTableId>
       <RefColPositions>1</RefColPositions>
       <RefTableName>person</RefTableName>
       <RefKeyName>person_pkey</RefKeyName>
       <RefColNames>id</RefColNames>
+      <OnDelete>set-null</OnDelete>
     </foreign-key>
     <check id="50" parent="37" name="book_year_check">
       <ObjectId>16586</ObjectId>

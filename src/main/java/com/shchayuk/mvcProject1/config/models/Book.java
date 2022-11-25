@@ -1,20 +1,30 @@
 package com.shchayuk.mvcProject1.config.models;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 public class Book {
 
     private int id;
+
+    @NotEmpty(message = "Enter the name of the book")
+    @Size(min = 2, max = 100, message = "Enter the name of the book form 2 to 100 characters")
     private String name;
+    @NotEmpty(message = "Enter the name of the book")
+    @Size(min = 2, max = 100, message = "Enter the name of the book form 2 to 100 characters")
     private String author;
+    @Min(value = 1800, message = "The year should be greater than 1800")
+    @Max(value = 2022, message = "The year should be less than 2022")
     private int year;
     boolean isLent;
 
     public Book() {
     }
 
-    public Book(int id, String name, String author, int year) {
-        this.id = id;
+    public Book(String name, String author, int year) {
         this.name = name;
         this.author = author;
         this.year = year;

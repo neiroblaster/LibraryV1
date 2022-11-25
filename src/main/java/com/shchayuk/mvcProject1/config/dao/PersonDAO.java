@@ -28,14 +28,18 @@ public class PersonDAO {
                 person.getName(), person.getYear());
     }
 
+    //method for PersonValidator:
+    public Optional<Person> showPersonByName(String name){
+        return jdbcTemplate.query("SELECT * FROM Person WHERE name=?", new Object[]{name},
+                new BeanPropertyRowMapper<>(Person.class)).stream().findAny();
+    }
+
     public Person show(int id){
         return jdbcTemplate.query("SELECT * FROM Person WHERE id=?", new Object[]{id},
                 new BeanPropertyRowMapper<>(Person.class)).stream().findAny().orElse(null);
     }
 
     public Person showOwner(int id){
-        System.out.println(jdbcTemplate.query("SELECT p.name FROM person p JOIN book b on p.id = b.person_id WHERE b.id=? ", new Object[]{id},
-                new BeanPropertyRowMapper<>(Person.class)).stream().findAny().orElse(null));
         return jdbcTemplate.query("SELECT p.name FROM person p JOIN book b on p.id = b.person_id WHERE b.id=? ", new Object[]{id},
                 new BeanPropertyRowMapper<>(Person.class)).stream().findAny().orElse(null);
     }

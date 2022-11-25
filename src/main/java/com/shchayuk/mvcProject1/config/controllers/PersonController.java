@@ -4,24 +4,29 @@ import com.shchayuk.mvcProject1.config.dao.BookDAO;
 import com.shchayuk.mvcProject1.config.dao.PersonDAO;
 import com.shchayuk.mvcProject1.config.models.Book;
 import com.shchayuk.mvcProject1.config.models.Person;
-import com.sun.xml.internal.ws.policy.sourcemodel.PolicySourceModel;
+import com.shchayuk.mvcProject1.config.util.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/people")
 public class PersonController {
 
     private final PersonDAO personDAO;
+    private final PersonValidator personValidator;
 
     @Autowired
     private BookDAO bookDAO;
 
     @Autowired
-    public PersonController(PersonDAO personDAO) {
+    public PersonController(PersonDAO personDAO, PersonValidator personValidator) {
         this.personDAO = personDAO;
+        this.personValidator = personValidator;
     }
 
     @GetMapping()
@@ -45,7 +50,14 @@ public class PersonController {
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("person") Person person){
+    public String create(@ModelAttribute("person") @Valid Person person,
+                         BindingResult bindingResult){
+        personValidator.validate(person, bindingResult);
+
+        if(bindingResult.hasErrors()){
+            return "people/new";
+        }
+
         personDAO.save(person);
         return "redirect:/people";
     }
@@ -58,9 +70,16 @@ public class PersonController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("person") Person person, @PathVariable("id") int id){
+    public String update(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult,
+                         @PathVariable("id") int id){
+        personValidator.validate(person, bindingResult);
+
+        if(bindingResult.hasErrors()){
+            return "people/edit";
+        }
+
         personDAO.update(person, id);
-        return "redirect:/people";
+        return "redirect:/people/" + id;
     }
 
     @DeleteMapping("/{id}")
